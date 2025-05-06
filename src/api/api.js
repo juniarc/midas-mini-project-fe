@@ -101,7 +101,7 @@ export const findTimesheetById = async (token, id) => {
 
 export const editTimesheet = async (token, body, id) => {
   try {
-    const response = await fetch(`${BASE_URL}/timesheet/edit?id=${id}`, {
+    const response = await fetch(`${BASE_URL}/timesheet/edit/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -228,6 +228,25 @@ export const deleteEmployee = async (token, id) => {
     if (!response.ok) {
       throw new Error("Failed edit timesheet.");
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllHr = async (token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/hr/viewHR`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed edit timesheet.");
+    }
+
+    return await response.json();
   } catch (error) {
     console.log(error);
   }

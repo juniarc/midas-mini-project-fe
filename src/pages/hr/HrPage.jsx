@@ -1,6 +1,24 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getAllHr } from "../../api/api";
+import { useAuthContext } from "../../context/AuthContext";
+import { format } from "date-fns";
 
 export default function HrPage() {
+  const { authUser } = useAuthContext();
+  const [hrList, setHrList] = useState([]);
+
+  useEffect(() => {
+    const getHrList = async () => {
+      try {
+        const list = await getAllHr(authUser);
+        setHrList(list);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getHrList();
+  }, [authUser]);
   return (
     <>
       <title>HR</title>
@@ -23,12 +41,20 @@ export default function HrPage() {
             </tr>
           </thead>
           <tbody class="table-group-divider">
-            {/* <tr th:each="ds : ${dashboard}">
-            <td th:text="${ds.employeeName}"></td>
-            <td th:text="${ds.managerName}"></td>
-            <td th:text="${#dates.format(ds.submissionDate, 'dd/MM/yyyy')}"></td>
-            <td th:text="${ds.approvalStatus}"></td>
-        </tr> */}
+            <tr>
+              {hrList.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.employee_name}</td>
+                  <td>{item.manager_name}</td>
+                  <td>
+                    {item.submissionDate === null
+                      ? "-"
+                      : format(item.submissionDate, "yyyy-MM-dd")}
+                  </td>
+                  <td>{item.approval_status}</td>
+                </tr>
+              ))}
+            </tr>
           </tbody>
         </table>
       </div>

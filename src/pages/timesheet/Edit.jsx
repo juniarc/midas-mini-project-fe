@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../style/datePicker.css";
 import * as Yup from "yup";
 import { useAuthContext } from "../../context/AuthContext";
-import { createTimesheet, findTimesheetById } from "../../api/api";
+import { editTimesheet, findTimesheetById } from "../../api/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -51,7 +51,7 @@ export default function EditTimesheet() {
 
   const onSubmit = async (value) => {
     try {
-      await createTimesheet(authUser, value);
+      await editTimesheet(authUser, value, timesheetId);
       navigate("/timesheet");
     } catch (error) {
       console.log(error);
