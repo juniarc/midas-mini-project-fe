@@ -3,9 +3,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../style/datePicker.css";
 import * as Yup from "yup";
-import { createEmployee } from "../../api/api";
-import { useNavigate } from "react-router-dom";
+import { editEmployee, findEmployeeById } from "../../api/api";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
 
 function DatePickerFiled({ field, form }) {
   return (
@@ -22,16 +23,27 @@ function DatePickerFiled({ field, form }) {
   );
 }
 
-export default function CreateEmployee() {
+export default function EditEmployee() {
+  const { employeeId } = useParams();
   const navigate = useNavigate();
   const { authUser } = useAuthContext();
 
+  const [employeeData, setEmployeeData] = useState({});
+
+  useEffect(() => {
+    const getEmployeeData = async () => {
+      const response = await findEmployeeById(authUser, employeeId);
+      setEmployeeData(response);
+    };
+    getEmployeeData();
+  }, [authUser, employeeId]);
+
   const initialValue = {
-    employeeName: "",
-    dateJoin: "",
-    managerId: "",
-    employeeEmail: "",
-    employeePhone: "",
+    employeeName: employeeData.employeeName,
+    dateJoin: employeeData.dateJoin,
+    managerId: employeeData.managerId,
+    employeeEmail: employeeData.employeeEmail,
+    employeePhone: employeeData.employeePhone,
   };
   const createSchema = Yup.object().shape({
     employeeName: Yup.string().required("Employee Name is required"),
@@ -43,7 +55,7 @@ export default function CreateEmployee() {
 
   const onSubmit = async (value, { setSubmitting, setStatus }) => {
     try {
-      await createEmployee(authUser, value);
+      await editEmployee(authUser, value, employeeId);
       navigate("/employee");
     } catch (error) {
       setStatus("Create employee failed. Please try again");
@@ -61,6 +73,7 @@ export default function CreateEmployee() {
             <h2 class="text-center mb-5">New Employee</h2>
 
             <Formik
+              enableReinitialize
               initialValues={initialValue}
               validationSchema={createSchema}
               onSubmit={onSubmit}

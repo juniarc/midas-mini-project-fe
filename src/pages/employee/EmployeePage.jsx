@@ -1,6 +1,39 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { deleteEmployee, getAllEmployee } from "../../api/api";
+import { useAuthContext } from "../../context/AuthContext";
+import { format } from "date-fns";
+import ConfirmDialog from "../../components/ConfirmationModal";
 
 export default function EmployeePage() {
+  const { authUser } = useAuthContext();
+  const [employeeList, setEmployeeList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const formatDate = (date) => {
+    return format(date, "dd/MM/yyyy");
+  };
+
+  useEffect(() => {
+    const getEmployeeList = async () => {
+      const response = await getAllEmployee(authUser);
+      setEmployeeList(response);
+    };
+
+    getEmployeeList();
+  }, []);
+
+  const onDelete = async (id) => {
+    try {
+      await deleteEmployee(authUser, id);
+      const newEmployeeList = employeeList.filter(
+        (employee) => employee.id !== id
+      );
+      setEmployeeList(newEmployeeList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <title>Employee</title>
@@ -28,26 +61,40 @@ export default function EmployeePage() {
             </tr>
           </thead>
           <tbody class="table-group-divider">
-            {/* <tr th:each="employee : ${employeeList}">
-            <td th:text="${employee.id}"></td>
-            <td th:text="${employee.employeeName}"></td>
-            <td th:text="${employee.dateJoin}"></td>
-            <td th:text="${employee.managerId}"></td>
-            <td th:text="${employee.employeeEmail}"></td>
-            <td th:text="${employee.employeePhone}"></td>
-            <td style="white-space:nowrap">
-                <a class="btn btn-primary btn-sm"
-                   th:href="@{/employees/edit(id=${employee.id})}"
-                   >
+            {employeeList.map((employee, index) => (
+              <tr key={index}>
+                <td>{employee.id}</td>
+                <td>{employee.employeeName}</td>
+                <td>{formatDate(employee.dateJoin)}</td>
+                <td>{employee.managerId}</td>
+                <td>{employee.employeeEmail}</td>
+                <td>{employee.employeePhone}</td>
+                <td>
+                  <Link
+                    to={`/employee/edit/${employee.id}`}
+                    class="btn btn-primary btn-sm me-2"
+                  >
                     EDIT
-                </a>
-                <a class="btn btn-danger btn-sm"
-                   th:href="@{/employees/delete(id=${employee.id})}"
-                   onclick="return confirm('Are you sure?')">
+                  </Link>
+                  <button
+                    onClick={() => setShowDialog(true)}
+                    class="btn btn-danger btn-sm"
+                  >
                     DELETE
-                </a>
-            </td>
-        </tr> */}
+                  </button>
+                  <ConfirmDialog
+                    show={showDialog}
+                    onHide={() => setShowDialog(false)}
+                    onConfirm={() => {
+                      onDelete(employee.id);
+                      setShowDialog(false);
+                    }}
+                    title="Delete Employee"
+                    message={`Are you sure you want to delete ${employee.employeeName}?`}
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

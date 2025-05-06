@@ -10,6 +10,7 @@ import CreateTimesheet from "./pages/timesheet/Create";
 import EmployeePage from "./pages/employee/EmployeePage";
 import CreateEmployee from "./pages/employee/Create";
 import HrPage from "./pages/hr/HrPage";
+import EditEmployee from "./pages/employee/Edit";
 
 function App() {
   return (
@@ -68,6 +69,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateEmployee />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee/edit/:employeeId"
+          element={
+            <ProtectedRoute>
+              <EditEmployee />
             </ProtectedRoute>
           }
         />

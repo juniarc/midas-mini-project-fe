@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "http://localhost:8082";
 
 export const login = async (body) => {
   try {
@@ -130,6 +130,103 @@ export const deleteTimesheet = async (token, id) => {
 
     if (!response.ok) {
       throw new Error("Failed delete timesheet.");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllEmployee = async (token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/employees/all`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Fetch failed");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createEmployee = async (token, body) => {
+  try {
+    const response = await fetch(`${BASE_URL}/employees/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed create employee.");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const findEmployeeById = async (token, id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/employees/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed get employee.");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const editEmployee = async (token, body, id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/employees/edit/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed edit employee.");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteEmployee = async (token, id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/employees/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed edit timesheet.");
     }
   } catch (error) {
     console.log(error);
