@@ -10,7 +10,7 @@ export default function TimesheetPage() {
   const [showDialog, setShowDialog] = useState(false);
 
   const formatDate = (date) => {
-    return format(date, "yyyy-mm-dd");
+    return format(date, "yyyy-MM-dd");
   };
 
   useEffect(() => {

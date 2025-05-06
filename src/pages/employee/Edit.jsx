@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../style/datePicker.css";
 import * as Yup from "yup";
 import { editEmployee, findEmployeeById } from "../../api/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect, useState } from "react";
 
@@ -177,9 +177,9 @@ export default function EditEmployee() {
                       </button>
                     </div>
                     <div class="col-sm-4 d-grid">
-                      <a class="btn btn-outline-primary" href="/employee">
+                      <Link class="btn btn-outline-primary" to="/employee">
                         Cancel
-                      </a>
+                      </Link>
                     </div>
                   </div>
                   {status && (

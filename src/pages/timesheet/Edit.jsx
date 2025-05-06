@@ -5,7 +5,7 @@ import "../../style/datePicker.css";
 import * as Yup from "yup";
 import { useAuthContext } from "../../context/AuthContext";
 import { createTimesheet, findTimesheetById } from "../../api/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function DatePickerFiled({ field, form }) {
@@ -219,9 +219,9 @@ export default function EditTimesheet() {
                   </button>
                 </div>
                 <div class="col-sm-4 d-grid">
-                  <a class="btn btn-outline-primary" href="/timesheet">
+                  <Link class="btn btn-outline-primary" to="/timesheet">
                     Cancel
-                  </a>
+                  </Link>
                 </div>
               </div>
             </Form>
