@@ -11,6 +11,7 @@ import EmployeePage from "./pages/employee/EmployeePage";
 import CreateEmployee from "./pages/employee/Create";
 import HrPage from "./pages/hr/HrPage";
 import EditEmployee from "./pages/employee/Edit";
+import EditTimesheet from "./pages/timesheet/Edit";
 
 function App() {
   return (
@@ -53,6 +54,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateTimesheet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/timesheet/edit/:timesheetId"
+          element={
+            <ProtectedRoute>
+              <EditTimesheet />
             </ProtectedRoute>
           }
         />
