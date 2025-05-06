@@ -35,26 +35,18 @@ export default function EditTimesheet() {
   }, [authUser]);
 
   const initialValue = {
-    username: timesheet.username,
     date: timesheet.date,
     task: timesheet.task,
     hr: timesheet.hr,
     status: timesheet.status,
     remark: timesheet.remark,
-    reportManager: timesheet.reportManager,
-    reportStatus: timesheet.reportStatus,
-    reportRemark: timesheet.reportRemark,
   };
   const createSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
     date: Yup.date().required("Date is required"),
     task: Yup.string().required("Task is required"),
     hr: Yup.number().required("HR is required"),
     status: Yup.string(),
     remark: Yup.string(),
-    reportManager: Yup.string().required("Report Manager is required"),
-    reportStatus: Yup.string().required("RM Status is required"),
-    reportRemark: Yup.string(),
   });
 
   const onSubmit = async (value) => {
@@ -69,9 +61,10 @@ export default function EditTimesheet() {
     <div class="container my-4">
       <div class="row">
         <div class="col-md-8 mx-auto rounded border p-4">
-          <h2 class="text-center mb-5">New Timesheet</h2>
+          <h2 class="text-center mb-5">Edit Timesheet</h2>
 
           <Formik
+            enableReinitialize
             initialValues={initialValue}
             validationSchema={createSchema}
             onSubmit={(values) => {
@@ -79,7 +72,7 @@ export default function EditTimesheet() {
             }}
           >
             <Form>
-              <div class="row mb-3">
+              {/* <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">Username</label>
                 <div class="col-sm-8 align-items-start">
                   <Field type="text" class="form-control" name="username" />
@@ -90,7 +83,7 @@ export default function EditTimesheet() {
                     style={{ color: "red" }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">Submit Date</label>
@@ -161,7 +154,7 @@ export default function EditTimesheet() {
                 </div>
               </div>
 
-              <div class="row mb-3">
+              {/* <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">Report Manager</label>
                 <div class="col-sm-8">
                   <Field
@@ -210,7 +203,7 @@ export default function EditTimesheet() {
                     style={{ color: "red" }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="row">
                 <div class="offset-sm-4 col-sm-4 d-grid">

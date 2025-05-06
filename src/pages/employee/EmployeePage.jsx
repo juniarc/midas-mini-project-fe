@@ -9,6 +9,7 @@ export default function EmployeePage() {
   const { authUser } = useAuthContext();
   const [employeeList, setEmployeeList] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const formatDate = (date) => {
     return format(date, "dd/MM/yyyy");
@@ -23,11 +24,11 @@ export default function EmployeePage() {
     getEmployeeList();
   }, []);
 
-  const onDelete = async (id) => {
+  const onDelete = async () => {
     try {
-      await deleteEmployee(authUser, id);
+      await deleteEmployee(authUser, selectedId);
       const newEmployeeList = employeeList.filter(
-        (employee) => employee.id !== id
+        (employee) => employee.id !== selectedId
       );
       setEmployeeList(newEmployeeList);
     } catch (error) {
@@ -77,7 +78,10 @@ export default function EmployeePage() {
                     EDIT
                   </Link>
                   <button
-                    onClick={() => setShowDialog(true)}
+                    onClick={() => {
+                      setSelectedId(employee.id);
+                      setShowDialog(true);
+                    }}
                     class="btn btn-danger btn-sm"
                   >
                     DELETE
@@ -86,7 +90,7 @@ export default function EmployeePage() {
                     show={showDialog}
                     onHide={() => setShowDialog(false)}
                     onConfirm={() => {
-                      onDelete(employee.id);
+                      onDelete();
                       setShowDialog(false);
                     }}
                     title="Delete Employee"

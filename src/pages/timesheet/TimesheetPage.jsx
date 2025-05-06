@@ -8,6 +8,7 @@ export default function TimesheetPage() {
   const { authUser } = useAuthContext();
   const [timesheetList, setTimesheetList] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const formatDate = (date) => {
     return format(date, "yyyy-MM-dd");
@@ -21,10 +22,12 @@ export default function TimesheetPage() {
     getTimesheet();
   }, [authUser]);
 
-  const onDelete = async (id) => {
+  const onDelete = async () => {
     try {
-      await deleteTimesheet(authUser, id);
-      const newTimesheet = timesheetList.filter((item) => item.id != id);
+      await deleteTimesheet(authUser, selectedId);
+      const newTimesheet = timesheetList.filter(
+        (item) => item.id != selectedId
+      );
       setTimesheetList(newTimesheet);
     } catch (error) {
       console.log(error);
@@ -47,15 +50,11 @@ export default function TimesheetPage() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Username</th>
             <th>Date</th>
             <th>Task</th>
             <th>HR</th>
             <th>Status</th>
             <th>Remark</th>
-            <th>Report Manager</th>
-            <th>RM Status</th>
-            <th>RM Remark</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -63,20 +62,17 @@ export default function TimesheetPage() {
           {timesheetList.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
-              <td>{item.username}</td>
               <td>{formatDate(item.date)}</td>
               <td>{item.task}</td>
               <td>{item.hr}</td>
               <td>{item.status}</td>
               <td>{item.remark}</td>
-              <td>{item.reportManager}</td>
-              <td>{item.reportStatus}</td>
-              <td>{item.reportRemark}</td>
-              <td className="d-flex gap-3">
+              <td>
                 {item.reportStatus !== "Approved" && (
                   <>
                     <Link
-                      class="btn btn-primary btn-sm"
+                      class="btn btn-primary btn-sm me-2"
+                      style={{ width: "100px" }}
                       to={`/timesheet/edit/${item.id}`}
                     >
                       EDIT
@@ -84,7 +80,11 @@ export default function TimesheetPage() {
 
                     <button
                       class="btn btn-danger btn-sm"
-                      onClick={() => setShowDialog(true)}
+                      style={{ width: "100px" }}
+                      onClick={() => {
+                        setShowDialog(true);
+                        setSelectedId(item.id);
+                      }}
                     >
                       DELETE
                     </button>
@@ -92,7 +92,7 @@ export default function TimesheetPage() {
                       show={showDialog}
                       onHide={() => setShowDialog(false)}
                       onConfirm={() => {
-                        onDelete(item.id);
+                        onDelete();
                         setShowDialog(false);
                       }}
                       title="Delete Employee"
