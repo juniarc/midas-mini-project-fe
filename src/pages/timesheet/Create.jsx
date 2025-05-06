@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../style/datePicker.css";
 import * as Yup from "yup";
+import { useAuthContext } from "../../context/AuthContext";
+import { createTimesheet } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 function DatePickerFiled({ field, form }) {
   return (
@@ -17,6 +20,8 @@ function DatePickerFiled({ field, form }) {
 }
 
 export default function CreateTimesheet() {
+  const navigate = useNavigate();
+  const { authUser } = useAuthContext();
   const initialValue = {
     username: "",
     date: "",
@@ -25,20 +30,29 @@ export default function CreateTimesheet() {
     status: "",
     remark: "",
     reportManager: "",
-    rmStatus: "",
-    rmRemark: "",
+    reportStatus: "",
+    reportRemark: "",
   };
   const createSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
-    date: Yup.string().required("Date is required"),
+    date: Yup.date().required("Date is required"),
     task: Yup.string().required("Task is required"),
-    hr: Yup.string().required("HR is required"),
-    status: Yup.string().required("Status is required"),
-    remark: Yup.string().required("Remark is required"),
+    hr: Yup.number().required("HR is required"),
+    status: Yup.string(),
+    remark: Yup.string(),
     reportManager: Yup.string().required("Report Manager is required"),
-    rmStatus: Yup.string().required("RM Status is required"),
-    rmRemark: Yup.string().required("RM Remark is required"),
+    reportStatus: Yup.string().required("RM Status is required"),
+    reportRemark: Yup.string(),
   });
+
+  const onSubmit = async (value) => {
+    try {
+      await createTimesheet(authUser, value);
+      navigate("/timesheet");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div class="container my-4">
       <div class="row">
@@ -49,7 +63,7 @@ export default function CreateTimesheet() {
             initialValues={initialValue}
             validationSchema={createSchema}
             onSubmit={(values) => {
-              console.log(values);
+              onSubmit(values);
             }}
           >
             <Form>
@@ -70,7 +84,6 @@ export default function CreateTimesheet() {
                 <label class="col-sm-4 col-from-label">Submit Date</label>
                 <div class="col-sm-8">
                   <Field
-                    type="date"
                     class="form-control"
                     name="date"
                     component={DatePickerFiled}
@@ -100,7 +113,7 @@ export default function CreateTimesheet() {
               <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">HR</label>
                 <div class="col-sm-8">
-                  <Field type="text" class="form-control" name="hr" />
+                  <Field type="number" class="form-control" name="hr" />
                   <ErrorMessage
                     name="hr"
                     component="div"
@@ -158,13 +171,13 @@ export default function CreateTimesheet() {
                   Report Manager Status
                 </label>
                 <div class="col-sm-8">
-                  <Field class="form-select" name="rmStatus" as="select">
+                  <Field class="form-select" name="reportStatus" as="select">
                     <option value="Approved">Approved</option>
                     <option value="Pending">Pending</option>
                     <option value="Rejected">Rejected</option>
                   </Field>
                   <ErrorMessage
-                    name="rmStatus"
+                    name="reportStatus"
                     component="div"
                     className="text-start"
                     style={{ color: "red" }}
@@ -177,9 +190,9 @@ export default function CreateTimesheet() {
                   Report Manager Remark
                 </label>
                 <div class="col-sm-8">
-                  <Field type="text" class="form-control" name="rmRemark" />
+                  <Field type="text" class="form-control" name="reportRemark" />
                   <ErrorMessage
-                    name="rmRemark"
+                    name="reportRemark"
                     component="div"
                     className="text-start"
                     style={{ color: "red" }}

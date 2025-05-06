@@ -1,6 +1,35 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useAuthContext } from "../../context/AuthContext";
+import { getAllTimesheet, deleteTimesheet } from "../../api/api";
+import { format } from "date-fns";
+import ConfirmDialog from "../../components/ConfirmationModal";
 export default function TimesheetPage() {
+  const { authUser } = useAuthContext();
+  const [timesheetList, setTimesheetList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const formatDate = (date) => {
+    return format(date, "yyyy-mm-dd");
+  };
+
+  useEffect(() => {
+    const getTimesheet = async () => {
+      const response = await getAllTimesheet(authUser);
+      setTimesheetList(response);
+    };
+    getTimesheet();
+  }, [authUser]);
+
+  const onDelete = async (id) => {
+    try {
+      await deleteTimesheet(authUser, id);
+      const newTimesheet = timesheetList.filter((item) => item.id != id);
+      setTimesheetList(newTimesheet);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div class="container mt-4">
       <h2 class="text-center">Timesheet Views</h2>
@@ -30,38 +59,51 @@ export default function TimesheetPage() {
             <th>Action</th>
           </tr>
         </thead>
-        {/* <tbody class="table-group-divider">
-          <tr th:each="sheet : ${timesheet}">
-            <td th:text="${sheet.id}"></td>
-            <td th:text="${sheet.username}"></td>
-            <td th:text="${sheet.date.toString().substring(0, 10)}"></td>
-            <td th:text="${sheet.task}"></td>
-            <td th:text="${sheet.hrUsername}"></td>
-            <td th:text="${sheet.status}"></td>
-            <td th:text="${sheet.remark}"></td>
-            <td th:text="${sheet.reportManager}"></td>
-            <td th:text="${sheet.reportStatus}"></td>
-            <td th:text="${sheet.reportRemark}"></td>
-            <td style="white-space:nowrap">
-              <Link
-                class="btn btn-primary btn-sm"
-                th:href="@{/timesheet/edit(id=${sheet.id})}"
-                th:classappend="${sheet.reportStatus == 'Approved'} ? ' disabled opacity-50 pointer-events-none' : ''"
-              >
-                EDIT
-              </Link>
+        <tbody class="table-group-divider">
+          {timesheetList.map((item, index) => (
+            <tr key={index}>
+              <td>{item.id}</td>
+              <td>{item.username}</td>
+              <td>{formatDate(item.date)}</td>
+              <td>{item.task}</td>
+              <td>{item.hr}</td>
+              <td>{item.status}</td>
+              <td>{item.remark}</td>
+              <td>{item.reportManager}</td>
+              <td>{item.reportStatus}</td>
+              <td>{item.reportRemark}</td>
+              <td className="d-flex gap-3">
+                {item.reportStatus !== "Approved" && (
+                  <>
+                    <Link
+                      class="btn btn-primary btn-sm"
+                      to={`/timesheet/edit/${item.id}`}
+                    >
+                      EDIT
+                    </Link>
 
-              <Link
-                class="btn btn-danger btn-sm"
-                to="@{/timesheet/delete(id=${sheet.id})}"
-                th:classappend="${sheet.reportStatus == 'Approved'} ? ' disabled opacity-50 pointer-events-none' : ''"
-                onclick="return confirm('Are you sure?')"
-              >
-                DELETE
-              </Link>
-            </td>
-          </tr>
-        </tbody> */}
+                    <button
+                      class="btn btn-danger btn-sm"
+                      onClick={() => setShowDialog(true)}
+                    >
+                      DELETE
+                    </button>
+                    <ConfirmDialog
+                      show={showDialog}
+                      onHide={() => setShowDialog(false)}
+                      onConfirm={() => {
+                        onDelete(item.id);
+                        setShowDialog(false);
+                      }}
+                      title="Delete Employee"
+                      message={`Are you sure you want to delete ?`}
+                    />
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

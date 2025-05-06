@@ -44,7 +44,7 @@ export const register = async (body) => {
 
 export const getAllTimesheet = async (token) => {
   try {
-    const response = await fetch(`${BASE_URL}/timesheet`, {
+    const response = await fetch(`${BASE_URL}/timesheet/all`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ export const editTimesheet = async (token, body, id) => {
 
 export const deleteTimesheet = async (token, id) => {
   try {
-    const response = await fetch(`${BASE_URL}/timesheet/delete?id=${id}`, {
+    const response = await fetch(`${BASE_URL}/timesheet/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
