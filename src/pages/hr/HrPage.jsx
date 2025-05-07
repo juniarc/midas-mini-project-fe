@@ -23,7 +23,7 @@ export default function HrPage() {
     <>
       <title>HR</title>
       <div class="container mt-4">
-        <h2 class="text-center">Employee Views</h2>
+        <h2 class="text-center">HR Views</h2>
 
         <div className="mt-4 d-flex justify-content-end">
           <Link to="/" class="btn btn-primary mb-3">
