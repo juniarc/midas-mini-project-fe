@@ -23,7 +23,6 @@ export const login = async (body) => {
 };
 
 export const register = async (body) => {
-  console.log(body);
   try {
     const response = await fetch(`${BASE_URL}/api/auth/signup`, {
       method: "POST",

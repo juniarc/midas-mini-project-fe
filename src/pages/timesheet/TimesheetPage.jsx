@@ -50,6 +50,7 @@ export default function TimesheetPage() {
         <thead>
           <tr>
             <th>ID</th>
+            <th>Username</th>
             <th>Date</th>
             <th>Task</th>
             <th>HR</th>
@@ -62,6 +63,7 @@ export default function TimesheetPage() {
           {timesheetList.map((item, index) => (
             <tr key={index}>
               <td>{item.id}</td>
+              <td>{item.username}</td>
               <td>{formatDate(item.date)}</td>
               <td>{item.task}</td>
               <td>{item.hr}</td>
