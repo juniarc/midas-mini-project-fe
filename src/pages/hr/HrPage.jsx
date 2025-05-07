@@ -41,20 +41,18 @@ export default function HrPage() {
             </tr>
           </thead>
           <tbody class="table-group-divider">
-            <tr>
-              {hrList.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.employee_name}</td>
-                  <td>{item.manager_name}</td>
-                  <td>
-                    {item.submissionDate === null
-                      ? "-"
-                      : format(item.submissionDate, "yyyy-MM-dd")}
-                  </td>
-                  <td>{item.approval_status}</td>
-                </tr>
-              ))}
-            </tr>
+            {hrList.map((item, index) => (
+              <tr key={index}>
+                <td>{item.employeeName}</td>
+                <td>{item.managerName}</td>
+                <td>
+                  {item.submissionDate === null
+                    ? "-"
+                    : format(item.submissionDate, "yyyy-MM-dd")}
+                </td>
+                <td>{item.approvalStatus}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

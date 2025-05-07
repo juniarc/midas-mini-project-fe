@@ -56,6 +56,7 @@ export default function TimesheetPage() {
             <th>HR</th>
             <th>Status</th>
             <th>Remark</th>
+            <th>Report Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -69,6 +70,7 @@ export default function TimesheetPage() {
               <td>{item.hr}</td>
               <td>{item.status}</td>
               <td>{item.remark}</td>
+              <td>{item.reportStatus}</td>
               <td>
                 {item.reportStatus !== "Approved" && (
                   <>

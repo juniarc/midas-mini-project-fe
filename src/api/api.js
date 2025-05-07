@@ -61,6 +61,7 @@ export const getAllTimesheet = async (token) => {
 };
 
 export const createTimesheet = async (token, body) => {
+  console.log(body);
   try {
     const response = await fetch(`${BASE_URL}/timesheet/create`, {
       method: "POST",

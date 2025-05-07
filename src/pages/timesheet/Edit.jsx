@@ -40,6 +40,7 @@ export default function EditTimesheet() {
     hr: timesheet.hr,
     status: timesheet.status,
     remark: timesheet.remark,
+    reportStatus: timesheet.reportStatus,
   };
   const createSchema = Yup.object().shape({
     date: Yup.date().required("Date is required"),
@@ -47,6 +48,7 @@ export default function EditTimesheet() {
     hr: Yup.number().required("HR is required"),
     status: Yup.string(),
     remark: Yup.string(),
+    reportStatus: Yup.string().required("Report Status is required"),
   });
 
   const onSubmit = async (value) => {
@@ -154,7 +156,7 @@ export default function EditTimesheet() {
                 </div>
               </div>
 
-              {/* <div class="row mb-3">
+              {/* {/* <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">Report Manager</label>
                 <div class="col-sm-8">
                   <Field
@@ -169,7 +171,7 @@ export default function EditTimesheet() {
                     style={{ color: "red" }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">
@@ -190,7 +192,7 @@ export default function EditTimesheet() {
                 </div>
               </div>
 
-              <div class="row mb-3">
+              {/* <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">
                   Report Manager Remark
                 </label>
@@ -203,7 +205,7 @@ export default function EditTimesheet() {
                     style={{ color: "red" }}
                   />
                 </div>
-              </div> */}
+              </div>  */}
 
               <div class="row">
                 <div class="offset-sm-4 col-sm-4 d-grid">

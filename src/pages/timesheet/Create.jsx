@@ -28,6 +28,7 @@ export default function CreateTimesheet() {
     hr: "",
     status: "",
     remark: "",
+    reportStatus: "",
   };
   const createSchema = Yup.object().shape({
     date: Yup.date().required("Date is required"),
@@ -35,6 +36,7 @@ export default function CreateTimesheet() {
     hr: Yup.number().required("HR is required"),
     status: Yup.string(),
     remark: Yup.string(),
+    reportStatus: Yup.string().required("Report Status is required"),
   });
 
   const onSubmit = async (value) => {
@@ -76,6 +78,7 @@ export default function CreateTimesheet() {
                 <label class="col-sm-4 col-from-label">Submit Date</label>
                 <div class="col-sm-8">
                   <Field
+                    type="date"
                     class="form-control"
                     name="date"
                     component={DatePickerFiled}
@@ -156,7 +159,7 @@ export default function CreateTimesheet() {
                     style={{ color: "red" }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">
@@ -164,6 +167,9 @@ export default function CreateTimesheet() {
                 </label>
                 <div class="col-sm-8">
                   <Field class="form-select" name="reportStatus" as="select">
+                    <option value="" disabled>
+                      Select Status
+                    </option>
                     <option value="Approved">Approved</option>
                     <option value="Pending">Pending</option>
                     <option value="Rejected">Rejected</option>
@@ -177,7 +183,7 @@ export default function CreateTimesheet() {
                 </div>
               </div>
 
-              <div class="row mb-3">
+              {/* <div class="row mb-3">
                 <label class="col-sm-4 col-from-label">
                   Report Manager Remark
                 </label>
